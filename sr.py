@@ -1,0 +1,48 @@
+#!/usr/bin/python3
+
+#  ____                  ____            _ _           _
+# / ___| _   _ ___      |  _ \ ___ _ __ | (_) ___ __ _| |_ ___  _ __
+# \___ \| | | / __|_____| |_) / _ \ '_ \| | |/ __/ _` | __/ _ \| '__|
+#  ___) | |_| \__ \_____|  _ <  __/ |_) | | | (_| (_| | || (_) | |
+# |____/ \__, |___/     |_| \_\___| .__/|_|_|\___\__,_|\__\___/|_|
+#        |___/                    |_|
+
+# Sys-Replicator V1 2019-06-19
+# Ben Joyner
+
+import os
+import argparse
+
+class parseArguments():
+    parser = argparse.ArgumentParser(description='A simple system replicator to backup/restore dotfiles')
+    parser.add_argument('-b', '--backup', action='store_true', help='Backup ~/.config/')
+    parser.add_argument('-r', '--restore', action='store_true', help='Restore dotfiles to ~/.config/')
+    parser.add_argument('-v', '--verbose', action='store_true', help='Copy files with extra verbosity')
+    args = parser.parse_args()
+
+def backup():
+    print('Creating dotfiles backup')
+    if p.args.verbose:
+        os.system('mkdir -p ~/dotfiles && cp -vr ~/.config/* ~/dotfiles/')
+    else:
+        os.system('mkdir -p ~/dotfiles && cp -r ~/.config/* ~/dotfiles/')
+
+def restore():
+    print('Restoring dotfiles to ~/.config')
+    if p.args.verbose:
+        os.system('cp -vr ~/dotfiles/* ~/.config')
+    else:
+        os.system('cp -r ~/dotfiles/* ~/.config')
+
+def main():
+    if p.args.backup:
+        backup()
+    elif p.args.restore:
+        restore()
+    else:
+        p.parser.print_help()
+
+p = parseArguments()
+
+if __name__ == '__main__':
+    main()
