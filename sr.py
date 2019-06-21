@@ -18,27 +18,47 @@ class parseArguments():
     parser.add_argument('-b', '--backup', action='store_true', help='Backup ~/.config/')
     parser.add_argument('-r', '--restore', action='store_true', help='Restore dotfiles to ~/.config/')
     parser.add_argument('-v', '--verbose', action='store_true', help='Copy files with extra verbosity')
+    parser.add_argument('-l', '--list', action='store_true', help='List the contents of ~/.config/')
+    parser.add_argument('-a', '--all', action='store_true', help='Include dotfiles outside of ~/.config/')
     args = parser.parse_args()
 
 def backup():
     print('Creating dotfiles backup')
     if p.args.verbose:
-        os.system('mkdir -p ~/dotfiles && cp -vr ~/.config/* ~/dotfiles/')
+        if p.args.all:
+            os.system('mkdir -p ~/dotfiles && cp -vr ~/.* ~/dotfiles')
+        else:
+            os.system('mkdir -p ~/dotfiles && cp -vr ~/.config/* ~/dotfiles/')
+    elif p.args.all:
+        os.system('mkdir -p ~/dotfiles && cp -r ~/.* ~/dotfiles/')
     else:
         os.system('mkdir -p ~/dotfiles && cp -r ~/.config/* ~/dotfiles/')
 
 def restore():
     print('Restoring dotfiles to ~/.config')
     if p.args.verbose:
-        os.system('cp -vr ~/dotfiles/* ~/.config')
+        if p.args.all:
+            os.system('cp -vr ~/dotfiles/* ~/')
+        else:
+            os.system('cp -vr ~/dotfiles/* ~/.config')
+    elif p.args.all:
+        os.system('cp -r ~/dotfiles/* ~/')
     else:
         os.system('cp -r ~/dotfiles/* ~/.config')
+
+def list():
+    if p.args.all:
+        os.system('ls -a ~/')
+    else:
+        os.system('ls ~/.config')
 
 def main():
     if p.args.backup:
         backup()
     elif p.args.restore:
         restore()
+    elif p.args.list:
+        list()
     else:
         p.parser.print_help()
 
